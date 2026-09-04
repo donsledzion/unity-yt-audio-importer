@@ -42,7 +42,7 @@ Powered by `yt-dlp` and `ffmpeg`, featuring an interactive UI Toolkit waveform t
 3. Select **Add package from git URL...**.
 4. Enter the Git repository URL:
    ```text
-   https://github.com/<your-username>/<your-repo-name>.git
+   https://github.com/donsledzion/unity-yt-audio-importer.git
    ```
 5. Click **Add**.
 
