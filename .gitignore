@@ -1,0 +1,6 @@
+# Ignore downloaded ThirdParty portable binaries
+**/ThirdParty~/**
+
+# OS generated files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,11 @@
+{
+  "name": "com.softaware.youtube-audio-importer",
+  "version": "1.0.0",
+  "displayName": "YouTube Audio Importer",
+  "description": "Editor-only tool for importing and trimming audio clips directly from YouTube into Unity using yt-dlp and ffmpeg.",
+  "unity": "6000.0",
+  "author": {
+    "name": "SoftAware"
+  },
+  "dependencies": {}
+}

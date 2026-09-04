@@ -1,0 +1,102 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xmlns:local="SoftAware.YouTubeAudioImporter.Editor.UI.Components">
+    <ui:Style src="YouTubeAudioImporterWindow.uss" />
+    <ui:ScrollView class="root-container">
+        <!-- Header -->
+        <ui:VisualElement class="header-container">
+            <ui:Label text="YouTube Audio Importer" class="header-title" />
+            <ui:Label name="binary-status-badge" text="Checking binaries..." class="status-badge status-badge--warning" />
+        </ui:VisualElement>
+
+        <!-- Missing Binaries Banner (shown only when binaries are not ready) -->
+        <ui:VisualElement name="binary-missing-banner" class="section-box" style="display: none; background-color: rgba(220, 53, 69, 0.15); border-color: #c62828;">
+            <ui:Label text="Required binaries (yt-dlp / ffmpeg) are not installed or missing." class="metadata-details" style="-unity-font-style: bold; color: #ff8a80;" />
+            <ui:Button name="btn-banner-download-binaries" text="Download &amp; Install Binaries (One-Click)" class="action-btn action-btn--primary" style="margin-top: 6px;" />
+        </ui:VisualElement>
+
+        <!-- Binary Settings Section (collapsible) -->
+        <ui:Foldout name="foldout-binaries" text="Environment &amp; Binaries" value="false">
+            <ui:VisualElement class="section-box">
+                <ui:Label text="Binaries are searched in ThirdParty~, system PATH, or configured custom paths." class="metadata-details" />
+                <ui:VisualElement class="input-row" style="margin-top: 6px;">
+                    <ui:TextField name="input-ytdlp-path" label="yt-dlp Path" style="flex-grow: 1;" />
+                    <ui:Button name="btn-browse-ytdlp" text="Browse" />
+                </ui:VisualElement>
+                <ui:VisualElement class="input-row" style="margin-top: 4px;">
+                    <ui:TextField name="input-ffmpeg-path" label="ffmpeg Path" style="flex-grow: 1;" />
+                    <ui:Button name="btn-browse-ffmpeg" text="Browse" />
+                </ui:VisualElement>
+                <ui:Button name="btn-download-binaries" text="Download / Update Binaries (yt-dlp &amp; ffmpeg)" class="action-btn action-btn--primary" style="margin-top: 8px;" />
+            </ui:VisualElement>
+        </ui:Foldout>
+
+        <!-- Step 1: URL & Metadata -->
+        <ui:VisualElement class="section-box">
+            <ui:Label text="1. Video Source" class="section-title" />
+            <ui:VisualElement class="input-row">
+                <ui:TextField name="input-video-url" placeholder-text="Paste YouTube URL here (e.g. https://www.youtube.com/watch?v=...)" style="flex-grow: 1;" />
+                <ui:Button name="btn-fetch-metadata" text="Fetch Metadata" class="action-btn action-btn--primary" />
+            </ui:VisualElement>
+
+            <!-- Metadata details card -->
+            <ui:VisualElement name="metadata-card" class="metadata-card" style="display: none;">
+                <ui:Image name="metadata-thumbnail" class="metadata-thumbnail" />
+                <ui:VisualElement class="metadata-info">
+                    <ui:Label name="metadata-title" text="Video Title" class="metadata-title" />
+                    <ui:Label name="metadata-author" text="Author: Unknown" class="metadata-details" />
+                    <ui:Label name="metadata-duration" text="Duration: 00:00" class="metadata-details" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Step 2: Import Options -->
+        <ui:VisualElement name="section-import-options" class="section-box" style="display: none;">
+            <ui:Label text="2. Import Options" class="section-title" />
+            
+            <ui:DropdownField name="dropdown-format" label="Target Format" />
+            <ui:DropdownField name="dropdown-bitrate" label="Audio Bitrate" />
+
+            <ui:VisualElement class="input-row" style="margin-top: 4px;">
+                <ui:TextField name="input-target-folder" label="Target Folder" value="Assets/Audio" style="flex-grow: 1;" />
+                <ui:Button name="btn-browse-target-folder" text="Browse" />
+            </ui:VisualElement>
+
+            <ui:TextField name="input-custom-filename" label="File Name (optional)" placeholder-text="Leave empty to use video title" style="margin-top: 4px;" />
+
+            <ui:Button name="btn-import-audio" text="Download &amp; Import to Project" class="action-btn action-btn--success" style="margin-top: 10px;" />
+        </ui:VisualElement>
+
+        <!-- Step 3: Waveform & Trimming -->
+        <ui:VisualElement name="section-trimming" class="section-box" style="display: none;">
+            <ui:Label text="3. Waveform &amp; Trimming" class="section-title" />
+            <ui:Label text="Drag green/red handles to trim, or enter precise time values in seconds." class="metadata-details" style="margin-bottom: 6px;" />
+
+            <local:WaveformTrimView name="waveform-trim-view" />
+
+            <ui:VisualElement class="waveform-controls">
+                <ui:VisualElement class="trim-inputs-row">
+                    <ui:FloatField name="input-trim-start" label="Start (s)" />
+                    <ui:FloatField name="input-trim-end" label="End (s)" />
+                    <ui:Label name="label-trim-duration" text="Trimmed: 0.00s" class="metadata-details" />
+                </ui:VisualElement>
+                
+                <ui:VisualElement style="flex-direction: row; align-items: center;">
+                    <ui:Toggle name="toggle-loop-preview" label="Loop" value="false" style="margin-right: 8px;" />
+                    <ui:Button name="btn-play-preview" text="Play Preview" />
+                    <ui:Button name="btn-save-trimmed" text="Save Trimmed Copy" class="action-btn action-btn--primary" style="margin-left: 6px;" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Status & Progress -->
+        <ui:VisualElement name="section-progress" class="progress-container" style="display: none;">
+            <ui:ProgressBar name="import-progress-bar" title="Processing..." />
+            <ui:VisualElement style="flex-direction: row; justify-content: space-between; align-items: center; margin-top: 4px;">
+                <ui:Label name="label-status" text="Ready" class="metadata-details" style="flex-grow: 1;" />
+                <ui:Button name="btn-cancel-operation" text="Cancel" style="height: 20px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Legal disclaimer footer -->
+        <ui:Label text="YouTube Audio Importer is intended solely for importing content you own or that is in the public domain." class="footer-disclaimer" />
+    </ui:ScrollView>
+</ui:UXML>
